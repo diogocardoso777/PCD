@@ -2,6 +2,9 @@ package game;
 
 
 import java.util.Observable;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import environment.Cell;
 import environment.Coordinate;
 
@@ -32,11 +35,14 @@ public class Game extends Observable {
 	 */
 	public void addPlayerToGame(Player player) {
 		Cell initialPos=getRandomCell();
-		initialPos.setPlayer(player);
-		
+		try {
+			initialPos.setPlayer(player);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+
 		// To update GUI
 		notifyChange();
-		
 	}
 
 	public Cell getCell(Coordinate at) {

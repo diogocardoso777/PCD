@@ -13,4 +13,11 @@ public class PhoneyHumanPlayer extends Player {
 	public boolean isHumanPlayer() {
 		return true;
 	}
+
+	//TODO thread method  implementation
+
+	@Override
+	public void run() {
+
+	}
 }

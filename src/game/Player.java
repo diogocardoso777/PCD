@@ -3,13 +3,17 @@ package game;
 
 
 import environment.Cell;
+import environment.Coordinate;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Represents a player.
  * @author luismota
  *
  */
-public abstract class Player  {
+public abstract class Player extends Thread{
 
 
 	protected  Game game;
@@ -21,6 +25,11 @@ public abstract class Player  {
 
 	// TODO: get player position from data in game
 	public Cell getCurrentCell() {
+		for (int x = 0; x < Game.DIMX; x++)
+			for (int y = 0; y < Game.DIMY; y++) {
+				if (game.board[x][y].getPlayer().equals(this))
+					return game.board[x][y].getPlayer().getCurrentCell();
+			}
 		return null;
 	}
 
@@ -70,4 +79,6 @@ public abstract class Player  {
 	public int getIdentification() {
 		return id;
 	}
+
+
 }
