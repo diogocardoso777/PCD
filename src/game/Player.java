@@ -33,12 +33,12 @@ public abstract class Player extends Thread{
 		return null;
 	}
 
-	public Player(int id, Game game, byte strength) {
+	public Player(int id, Game game) {
 		super();
 		this.id = id;
 		this.game=game;
-		currentStrength=strength;
-		originalStrength=strength;
+		originalStrength= (byte) (Math.floor(Math.random() * 3) + 1);
+		currentStrength=originalStrength;
 	}
 
 	public abstract boolean isHumanPlayer();

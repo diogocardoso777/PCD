@@ -42,7 +42,7 @@ public class Cell {
 			wait();
 		}
 		this.player = player;
-		notifyAll();
+		//notifyAll();
 	}
 	
 	
