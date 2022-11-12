@@ -2,6 +2,7 @@ package game;
 
 
 import java.util.Observable;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -27,14 +28,15 @@ public class Game extends Observable {
 	
 		for (int x = 0; x < Game.DIMX; x++) 
 			for (int y = 0; y < Game.DIMY; y++) 
-				board[x][y] = new Cell(new Coordinate(x, y),this);
+				board[x][y] = new Cell(new Coordinate(x, y),this	);
 	}
 	
 	/** 
 	 * @param player 
 	 */
-	public void addPlayerToGame(Player player) {
+	public void addPlayerToGame (Player player) {
 		Cell initialPos=getRandomCell();
+		//Cell c1 = getCell(new Coordinate(2,14));
 		try {
 			initialPos.setPlayer(player);
 		} catch (InterruptedException e) {

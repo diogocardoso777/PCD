@@ -4,8 +4,11 @@ package game;
 
 import environment.Cell;
 import environment.Coordinate;
+import environment.Direction;
 
 import java.util.Arrays;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 /**
@@ -13,8 +16,7 @@ import java.util.stream.Collectors;
  * @author luismota
  *
  */
-public abstract class Player extends Thread{
-
+public abstract class Player implements Runnable{
 
 	protected  Game game;
 
@@ -23,12 +25,15 @@ public abstract class Player extends Thread{
 	private byte currentStrength;
 	protected byte originalStrength;
 
+	private Lock lock = new ReentrantLock();
+
 	// TODO: get player position from data in game
 	public Cell getCurrentCell() {
 		for (int x = 0; x < Game.DIMX; x++)
 			for (int y = 0; y < Game.DIMY; y++) {
-				if (game.board[x][y].getPlayer().equals(this))
-					return game.board[x][y].getPlayer().getCurrentCell();
+				Player p = game.board[x][y].getPlayer();
+				if (p.equals(this))
+					return p.getCurrentCell();
 			}
 		return null;
 	}
@@ -42,6 +47,16 @@ public abstract class Player extends Thread{
 	}
 
 	public abstract boolean isHumanPlayer();
+
+
+	//direction random
+	public void move(Direction dir){
+		Cell from = getCurrentCell();
+		Coordinate coordTo = new Coordinate(from.getPosition().x + dir.getVector().x, from.getPosition().y + dir.getVector().y);
+		Cell to = new Cell(coordTo, game);
+
+		from.movePlayer(this, to);
+	}
 	
 	@Override
 	public String toString() {

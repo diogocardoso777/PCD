@@ -1,11 +1,14 @@
 package game;
 
+import environment.Cell;
+import environment.Direction;
+
 /**
  * Class to demonstrate a player being added to the game.
  * @author luismota
  *
  */
-public class PhoneyHumanPlayer extends Player {
+public class PhoneyHumanPlayer extends Player implements Runnable{
 	public PhoneyHumanPlayer(int id, Game game) {
 		super(id, game);
 	}
@@ -16,8 +19,11 @@ public class PhoneyHumanPlayer extends Player {
 
 	//TODO thread method  implementation
 
+	
 	@Override
 	public void run() {
-		System.out.println("id : " + this.getId() + "strength : " + this.getCurrentStrength());
+		game.addPlayerToGame(this);
+		
+		//System.out.println("id : " + this.getId() + "strength : " + this.getCurrentStrength());
 	}
 }
