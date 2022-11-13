@@ -42,10 +42,10 @@ public class Cell {
 		while(isOcupied()) {
 			//System.out.println("Célula de " + position.toString() + " está ocupada pelo jogador " + this.player.toString());
 			//		"Jogador "+ player.toString() + " terá de esperar que a posição fique livre.");
-			wait();
+			cellFree.await();
 		}
 		this.player = player;
-		notifyAll();
+		//cellOcupied.signalAll();
 	}
 
 	public synchronized void movePlayer(Player player, Cell to){
@@ -55,7 +55,7 @@ public class Cell {
 		if(!to.isOcupied()) {
 			try {
 				to.setPlayer(player);
-				this.setPlayer(null);
+				this.player = null;
 
 				cellFree.signalAll();				//notificar as threads à espera que a CELL fique livre
 			} catch (InterruptedException e) {
@@ -63,8 +63,10 @@ public class Cell {
 
 			}
 		}else{
-			if(to.getPlayer().getCurrentStrength() != -1){
-				//lutar
+			Player p = to.getPlayer();
+			if(p.getCurrentStrength() != -1){
+				fight(this.player, p, to);
+				this.player = null;
 			}
 			else{
 				return;			//caso em que o jogador dentro da CELL está morto

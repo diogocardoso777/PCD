@@ -4,7 +4,7 @@ import environment.Direction;
 
 import static java.lang.Thread.sleep;
 
-public class BotPlayer extends Player implements Runnable {
+public class BotPlayer extends Player{
     public BotPlayer(int id, Game game) {
         super(id, game);
     }
@@ -16,8 +16,9 @@ public class BotPlayer extends Player implements Runnable {
 
     @Override
     public void run() {
+        System.out.println(getIdentification());
         game.addPlayerToGame(this);
-        /*
+
         while(true){
             try {
                 sleep(Game.REFRESH_INTERVAL);
@@ -28,9 +29,9 @@ public class BotPlayer extends Player implements Runnable {
 
             if(prob < 0.25){
                 move(Direction.DOWN);
-            }else if(prob >= 0.25 && prob < 0.5){
+            }else if(prob < 0.5){
                 move(Direction.LEFT);
-            }else if(prob >= 0.5 && prob < 0.75){
+            }else if(prob < 0.75){
                 move(Direction.UP);
             }else{
                 move(Direction.RIGHT);
@@ -38,7 +39,7 @@ public class BotPlayer extends Player implements Runnable {
 
 
         }
-*/
+
 
         //run method
     }

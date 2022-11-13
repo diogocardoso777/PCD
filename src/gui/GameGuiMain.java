@@ -54,16 +54,17 @@ public class GameGuiMain implements Observer {
 		BotPlayer p9 = new BotPlayer(9, game);
 		BotPlayer p10 = new BotPlayer(10, game);
 
-		p1.run();
-		p2.run();
-		/*p3.run();
-		p4.run();
-		p5.run();
-		p6.run();
-		p7.run();
-		p8.run();
-		p9.run();
-		p10.run();*/
+		p2.start();
+		p1.start();
+		p3.start();
+		p4.start();
+		p5.start();
+		p6.start();
+		p7.start();
+		p8.start();
+		p9.start();
+		p10.start();
+
 
 	}
 

@@ -1,5 +1,7 @@
 package environment;
 
+import game.Game;
+
 public class Coordinate {
 	public final int x;
 	public final int y;
@@ -28,5 +30,9 @@ public class Coordinate {
 
 	public Coordinate translate(Coordinate vector) {
 		return new Coordinate(x+vector.x, y+vector.y);
+	}
+
+	public boolean isValidPosition(){
+		return this.x < Game.DIMX && this.x >= 0 && this.y < Game.DIMY && this.y >= 0;
 	}
 }

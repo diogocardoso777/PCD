@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * @author luismota
  *
  */
-public abstract class Player implements Runnable{
+public abstract class Player extends Thread{
 
 	protected  Game game;
 
@@ -25,15 +25,13 @@ public abstract class Player implements Runnable{
 	private byte currentStrength;
 	protected byte originalStrength;
 
-	private Lock lock = new ReentrantLock();
-
 	// TODO: get player position from data in game
 	public Cell getCurrentCell() {
 		for (int x = 0; x < Game.DIMX; x++)
 			for (int y = 0; y < Game.DIMY; y++) {
 				Player p = game.board[x][y].getPlayer();
-				if (p.equals(this))
-					return p.getCurrentCell();
+				if (p != null && p.equals(this))
+					return game.getCell(new Coordinate(x,y));
 			}
 		return null;
 	}
@@ -53,9 +51,15 @@ public abstract class Player implements Runnable{
 	public void move(Direction dir){
 		Cell from = getCurrentCell();
 		Coordinate coordTo = new Coordinate(from.getPosition().x + dir.getVector().x, from.getPosition().y + dir.getVector().y);
-		Cell to = new Cell(coordTo, game);
-
+		if(!coordTo.isValidPosition()) return;
+		Cell to = game.getCell(coordTo);		//tem que ser getCell(), estava a criar uma cell nova
 		from.movePlayer(this, to);
+	/*	from.takePlayer(p);
+		try {
+			to.setPlayer(p);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
 	}
 	
 	@Override
@@ -95,5 +99,12 @@ public abstract class Player implements Runnable{
 		return id;
 	}
 
+	public void addStrength(byte sumStrength){
+		this.currentStrength = (byte) (this.currentStrength + sumStrength);
+	}
+
+	public void killPlayer(){
+		this.currentStrength = 0;
+	}
 
 }
