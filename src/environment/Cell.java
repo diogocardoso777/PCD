@@ -65,9 +65,8 @@ public class Cell {
 			}
 		}else{
 			Player p = to.getPlayer();
-			if(p.getCurrentStrength() != -1){
+			if(p.getCurrentStrength() != 0){
 				fight(this.player, p);
-				this.player = null;
 			}
 			else{
 				return;			//caso em que o jogador dentro da CELL está morto
@@ -100,10 +99,11 @@ public class Cell {
 	}
 	public void fightStrengthChanger(Player winner, Player loser){
 		if((winner.getCurrentStrength() + loser.getCurrentStrength()) > 10){
-			winner.setStrength((byte)10);
+			winner.addStrength((byte) (10 - (int)winner.getCurrentStrength()));
 		}else{
 			winner.addStrength(loser.getCurrentStrength());
 		}
+		System.out.println("Killed player : " + loser.getIdentification());
 		loser.killPlayer();
 	}
 	

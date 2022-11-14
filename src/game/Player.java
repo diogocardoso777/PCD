@@ -67,7 +67,6 @@ public abstract class Player {
 		return "Player [id=" + id + ", currentStrength=" + currentStrength + ", getCurrentCell()=" + getCurrentCell()
 		+ "]";
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -103,9 +102,6 @@ public abstract class Player {
 		this.currentStrength = (byte) (this.currentStrength + sumStrength);
 	}
 
-	public void setStrength(byte newStrength){
-		this.currentStrength = newStrength;
-	}
 	public void killPlayer(){
 		this.currentStrength = 0;
 	}
