@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * @author luismota
  *
  */
-public abstract class Player extends Thread{
+public abstract class Player {
 
 	protected  Game game;
 
@@ -103,6 +103,9 @@ public abstract class Player extends Thread{
 		this.currentStrength = (byte) (this.currentStrength + sumStrength);
 	}
 
+	public void setStrength(byte newStrength){
+		this.currentStrength = newStrength;
+	}
 	public void killPlayer(){
 		this.currentStrength = 0;
 	}

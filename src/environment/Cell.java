@@ -1,6 +1,7 @@
 package environment;
 
 import com.sun.source.tree.ConditionalExpressionTree;
+import game.BotPlayer;
 import game.Game;
 import game.Player;
 
@@ -38,7 +39,7 @@ public class Cell {
 
 	// Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
 
-	public synchronized void setPlayer(Player player) throws InterruptedException {
+	public void setPlayer(Player player) throws InterruptedException {
 		while(isOcupied()) {
 			//System.out.println("Célula de " + position.toString() + " está ocupada pelo jogador " + this.player.toString());
 			//		"Jogador "+ player.toString() + " terá de esperar que a posição fique livre.");
@@ -65,7 +66,7 @@ public class Cell {
 		}else{
 			Player p = to.getPlayer();
 			if(p.getCurrentStrength() != -1){
-				fight(this.player, p, to);
+				fight(this.player, p);
 				this.player = null;
 			}
 			else{
@@ -81,6 +82,29 @@ public class Cell {
 
 		game.notifyChange();
 
+	}
+	public void fight(Player player1, Player player2){
+		int comparison = Byte.compare(player1.getCurrentStrength(), player2.getCurrentStrength());
+		if(comparison > 0){
+			fightStrengthChanger(player1, player2);
+		}else if(comparison < 0){
+			fightStrengthChanger(player2, player1);
+		}else{
+			double prob = Math.random();
+			if(prob > 0.5){
+				fightStrengthChanger(player1, player2);
+			}else{
+				fightStrengthChanger(player2, player1);
+			}
+		}
+	}
+	public void fightStrengthChanger(Player winner, Player loser){
+		if((winner.getCurrentStrength() + loser.getCurrentStrength()) > 10){
+			winner.setStrength((byte)10);
+		}else{
+			winner.addStrength(loser.getCurrentStrength());
+		}
+		loser.killPlayer();
 	}
 	
 	

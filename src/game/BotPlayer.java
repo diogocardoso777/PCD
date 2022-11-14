@@ -4,7 +4,7 @@ import environment.Direction;
 
 import static java.lang.Thread.sleep;
 
-public class BotPlayer extends Player{
+public class BotPlayer extends Player implements Runnable{
     public BotPlayer(int id, Game game) {
         super(id, game);
     }
@@ -19,11 +19,11 @@ public class BotPlayer extends Player{
         System.out.println(getIdentification());
         game.addPlayerToGame(this);
 
-        while(true){
+        while(super.getCurrentStrength()!= 0){
             try {
                 sleep(Game.REFRESH_INTERVAL);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                return;
             }
             double prob = Math.random();
 
