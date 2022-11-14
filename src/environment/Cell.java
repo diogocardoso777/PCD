@@ -5,6 +5,7 @@ import game.BotPlayer;
 import game.Game;
 import game.Player;
 
+import java.io.Serializable;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

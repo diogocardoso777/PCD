@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 import static java.lang.Thread.sleep;
 
 public class Client {
-    private BufferedReader in;
+    private ObjectInputStream in;
     private PrintWriter out;
     private Socket socket = new Socket((InetAddress.getByName(null)), PORTO);
     public static final int PORTO = 8080;
@@ -27,8 +27,7 @@ public class Client {
         System.out.println("Endereço: " + address);
         //this.socket = new Socket(address, PORTO);
         System.out.println("Socket:" + socket);
-        in = new BufferedReader(new InputStreamReader(
-                socket.getInputStream()));
+        in = new ObjectInputStream(socket.getInputStream());
         out = new PrintWriter(new BufferedWriter(
                 new OutputStreamWriter(socket.getOutputStream())),
                 true);

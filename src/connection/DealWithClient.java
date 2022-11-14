@@ -10,7 +10,7 @@ public class DealWithClient extends Thread{
     private Player player;
     private Socket socket;
     private BufferedReader in;
-    private PrintWriter out;
+    private ObjectOutputStream out;
 
     private GameGuiMain gameGuiMain;
 
@@ -21,12 +21,13 @@ public class DealWithClient extends Thread{
     private void doConnections(Socket socket) throws IOException {
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
-        out = new PrintWriter(new BufferedWriter(
-                new OutputStreamWriter(socket.getOutputStream())),
-                true);
+        out = new ObjectOutputStream(socket.getOutputStream());
     }
     public void serve(){
-        out.println(gameGuiMain);
+       // out.println(gameGuiMain);
+        //devemos mandar o board ou o game
+        //sendo assim n sei se a cell tem de ser Serializable ou o game
+        //Serializable é necessário para fazer o canal de objetos
     }
 
     @Override
