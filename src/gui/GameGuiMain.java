@@ -14,6 +14,10 @@ public class GameGuiMain implements Observer {
 	private BoardJComponent boardGui;
 	private Game game;
 
+	public static GameGuiMain GAMEGUI_INSTANCE;
+
+
+
 	public GameGuiMain() {
 		super();
 		game = new Game();
@@ -21,7 +25,18 @@ public class GameGuiMain implements Observer {
 
 		buildGui();
 
+
 	}
+
+
+	public static GameGuiMain getGameGuiInstance(){
+		if(GAMEGUI_INSTANCE == null){
+			GAMEGUI_INSTANCE = new GameGuiMain();
+			GAMEGUI_INSTANCE.init();
+		}
+		return GAMEGUI_INSTANCE;
+	}
+
 
 	private void buildGui() {
 		boardGui = new BoardJComponent(game);
@@ -85,8 +100,8 @@ public class GameGuiMain implements Observer {
 	}
 
 	public static void main(String[] args) {
-		GameGuiMain game = new GameGuiMain();
-		game.init();
+		GameGuiMain game = getGameGuiInstance();
+		//\game.init();
 
 	}
 

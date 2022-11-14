@@ -49,7 +49,7 @@ public class Cell {
 		//cellOcupied.signalAll();
 	}
 
-	public synchronized void movePlayer(Player player, Cell to){
+	public void movePlayer(Player player, Cell to){
 		this.lock.lock();
 		to.lock.lock();
 

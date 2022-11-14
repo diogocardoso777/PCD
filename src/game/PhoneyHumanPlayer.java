@@ -8,7 +8,7 @@ import environment.Direction;
  * @author luismota
  *
  */
-public class PhoneyHumanPlayer extends Player implements Runnable{
+public class PhoneyHumanPlayer extends Player{
 	public PhoneyHumanPlayer(int id, Game game) {
 		super(id, game);
 	}
@@ -19,11 +19,11 @@ public class PhoneyHumanPlayer extends Player implements Runnable{
 
 	//TODO thread method  implementation
 
-	
+	/*
 	@Override
 	public void run() {
 		game.addPlayerToGame(this);
 		
 		//System.out.println("id : " + this.getId() + "strength : " + this.getCurrentStrength());
-	}
+	}*/
 }
