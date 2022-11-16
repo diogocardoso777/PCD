@@ -16,31 +16,22 @@ public class BotPlayer extends Player implements Runnable{
 
     @Override
     public void run() {
-        System.out.println(getIdentification());
         game.addPlayerToGame(this);
 
-        while(super.getCurrentStrength()!= 0){
+        while(getCurrentStrength()!= 0 && super.getCurrentStrength() < 10){
             try {
-                sleep(Game.REFRESH_INTERVAL);
+                sleep(originalStrength * Game.REFRESH_INTERVAL);
             } catch (InterruptedException e) {
                 return;
             }
             double prob = Math.random();
 
-            if(prob < 0.25){
-                move(Direction.DOWN);
-            }else if(prob < 0.5){
-                move(Direction.LEFT);
-            }else if(prob < 0.75){
-                move(Direction.UP);
-            }else{
-                move(Direction.RIGHT);
-            }
-
+            if (prob < 0.25) move(Direction.DOWN);
+            else if (prob < 0.5) move(Direction.LEFT);
+            else if (prob < 0.75) move(Direction.UP);
+            else move(Direction.RIGHT);
 
         }
-
-
-        //run method
+        if(super.getCurrentStrength() >= 10) System.out.println("Thread nr. " + getIdentification() + " has won");
     }
 }

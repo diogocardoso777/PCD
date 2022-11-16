@@ -41,12 +41,13 @@ public class Cell {
 	// Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
 
 	public void setPlayer(Player player) throws InterruptedException {
+		lock.lock();
 		while(isOcupied()) {
-			//System.out.println("Célula de " + position.toString() + " está ocupada pelo jogador " + this.player.toString());
-			//		"Jogador "+ player.toString() + " terá de esperar que a posição fique livre.");
+			System.out.println("Célula de " + position.toString() + " está ocupada pelo jogador " + this.player.toString() + " O Jogador "+ player.toString() + " terá de esperar que a posição fique livre.");
 			cellFree.await();
 		}
 		this.player = player;
+		lock.unlock();
 		//cellOcupied.signalAll();
 	}
 
@@ -66,15 +67,9 @@ public class Cell {
 			}
 		}else{
 			Player p = to.getPlayer();
-			if(p.getCurrentStrength() != 0){
+			if(p.getCurrentStrength() != 0)
 				fight(this.player, p);
-			}
-			else{
-				return;			//caso em que o jogador dentro da CELL está morto
-			}
-
-			//falta ver se esta um player morto na cell
-			//fazer a interaçao entre players
+				//cellOcupied.signalAll();
 		}
 
 		to.lock.unlock();
@@ -85,29 +80,22 @@ public class Cell {
 	}
 	public void fight(Player player1, Player player2){
 		int comparison = Byte.compare(player1.getCurrentStrength(), player2.getCurrentStrength());
-		if(comparison > 0){
+		if(comparison > 0)
 			fightStrengthChanger(player1, player2);
-		}else if(comparison < 0){
+		else if(comparison < 0)
 			fightStrengthChanger(player2, player1);
-		}else{
-			double prob = Math.random();
-			if(prob > 0.5){
-				fightStrengthChanger(player1, player2);
-			}else{
-				fightStrengthChanger(player2, player1);
-			}
+		else{
+			if(Math.random() > 0.5) fightStrengthChanger(player1, player2);
+			else fightStrengthChanger(player2, player1);
 		}
 	}
+
 	public void fightStrengthChanger(Player winner, Player loser){
-		if((winner.getCurrentStrength() + loser.getCurrentStrength()) > 10){
-			winner.addStrength((byte) (10 - (int)winner.getCurrentStrength()));
-		}else{
-			winner.addStrength(loser.getCurrentStrength());
-		}
+		winner.addStrength(loser.getCurrentStrength());
+
 		System.out.println("Killed player : " + loser.getIdentification());
 		loser.killPlayer();
 	}
-	
 	
 
 }

@@ -52,7 +52,7 @@ public abstract class Player {
 		Cell from = getCurrentCell();
 		Coordinate coordTo = new Coordinate(from.getPosition().x + dir.getVector().x, from.getPosition().y + dir.getVector().y);
 		if(!coordTo.isValidPosition()) return;
-		Cell to = game.getCell(coordTo);		//tem que ser getCell(), estava a criar uma cell nova
+		Cell to = game.getCell(coordTo);
 		from.movePlayer(this, to);
 	/*	from.takePlayer(p);
 		try {
@@ -99,7 +99,11 @@ public abstract class Player {
 	}
 
 	public void addStrength(byte sumStrength){
-		this.currentStrength = (byte) (this.currentStrength + sumStrength);
+		byte resultStrength = (byte) (this.currentStrength + sumStrength);
+		if (resultStrength > 10)
+			this.currentStrength = (byte) 10;
+		else
+			this.currentStrength = resultStrength;
 	}
 
 	public void killPlayer(){

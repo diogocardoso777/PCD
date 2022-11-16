@@ -58,6 +58,8 @@ public class GameGuiMain implements Observer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		//BotPlayer[] bots = new BotPlayer[game.NUM_PLAYERS];
 		BotPlayer p1 = new BotPlayer(1, game);
 		BotPlayer p2 = new BotPlayer(2, game);
 		BotPlayer p3 = new BotPlayer(3, game);
@@ -67,7 +69,10 @@ public class GameGuiMain implements Observer {
 		BotPlayer p7 = new BotPlayer(7, game);
 		BotPlayer p8 = new BotPlayer(8, game);
 		BotPlayer p9 = new BotPlayer(9, game);
-		BotPlayer p10 = new BotPlayer(10, game);
+	/*	BotPlayer p10 = new BotPlayer(10, game);
+		BotPlayer p11 = new BotPlayer(11, game);
+		BotPlayer p12 = new BotPlayer(12, game);
+		BotPlayer p13 = new BotPlayer(12, game);*/
 
 		Thread t1 = new Thread(p1);
 		Thread t2 = new Thread(p2);
@@ -78,8 +83,13 @@ public class GameGuiMain implements Observer {
 		Thread t7 = new Thread(p7);
 		Thread t8 = new Thread(p8);
 		Thread t9 = new Thread(p9);
-		Thread t10 = new Thread(p10);
+	/*	Thread t10 = new Thread(p10);
+		Thread t11 = new Thread(p11);
+		Thread t12 = new Thread(p12);
+		Thread t13 = new Thread(p13);
 
+
+	 */
 		t1.start();
 		t2.start();
 		t3.start();
@@ -89,9 +99,12 @@ public class GameGuiMain implements Observer {
 		t7.start();
 		t8.start();
 		t9.start();
-		t10.start();
+	/*	t10.start();
+		t11.start();
+		t12.start();
+		t13.start();
 
-
+	 */
 	}
 
 	@Override

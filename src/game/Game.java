@@ -13,7 +13,7 @@ public class Game extends Observable {
 
 	public static final int DIMY = 30;
 	public static final int DIMX = 30;
-	private static final int NUM_PLAYERS = 90;
+	private static final int NUM_PLAYERS = 90;				//porque private??
 	private static final int NUM_FINISHED_PLAYERS_TO_END_GAME=3;
 
 	public static final long REFRESH_INTERVAL = 200;
@@ -38,7 +38,6 @@ public class Game extends Observable {
 	 */
 	public void addPlayerToGame (Player player) {
 		Cell initialPos=getRandomCell();
-		//Cell c1 = getCell(new Coordinate(2,14));
 		try {
 			initialPos.setPlayer(player);
 		} catch (InterruptedException e) {
