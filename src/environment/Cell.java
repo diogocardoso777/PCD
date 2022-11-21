@@ -40,7 +40,7 @@ public class Cell {
 
 	// Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
 
-	public void setPlayer(Player player) throws InterruptedException {
+	public void setPlayerInitially(Player player) throws InterruptedException {
 		lock.lock();
 		while(isOcupied()) {
 			System.out.println("Célula de " + position.toString() + " está ocupada pelo jogador " + this.player.toString() + " O Jogador "+ player.toString() + " terá de esperar que a posição fique livre.");
@@ -50,6 +50,16 @@ public class Cell {
 		lock.unlock();
 		//cellOcupied.signalAll();
 	}
+
+	public void setPlayer(Player player) throws InterruptedException {
+		while(isOcupied()) {
+			System.out.println("Célula de " + position.toString() + " está ocupada pelo jogador " + this.player.toString() + " O Jogador "+ player.toString() + " terá de esperar que a posição fique livre.");
+			cellFree.await();
+		}
+		this.player = player;
+		//cellOcupied.signalAll();
+	}
+
 
 	public void movePlayer(Player player, Cell to){
 		this.lock.lock();
@@ -92,8 +102,6 @@ public class Cell {
 
 	public void fightStrengthChanger(Player winner, Player loser){
 		winner.addStrength(loser.getCurrentStrength());
-
-		System.out.println("Killed player : " + loser.getIdentification());
 		loser.killPlayer();
 	}
 	

@@ -32,6 +32,10 @@ public class BotPlayer extends Player implements Runnable{
             else move(Direction.RIGHT);
 
         }
-        if(super.getCurrentStrength() >= 10) System.out.println("Thread nr. " + getIdentification() + " has won");
+        if(super.getCurrentStrength() >= 10) {
+            System.out.println("Thread nr. " + getIdentification() + " has won");
+            game.playerWin();
+        }
+        //game.countDownLatch.countDown();
     }
 }

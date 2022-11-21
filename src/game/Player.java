@@ -5,6 +5,7 @@ package game;
 import environment.Cell;
 import environment.Coordinate;
 import environment.Direction;
+import utils.CountDownLatch;
 
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
@@ -24,6 +25,7 @@ public abstract class Player {
 
 	private byte currentStrength;
 	protected byte originalStrength;
+
 
 	// TODO: get player position from data in game
 	public Cell getCurrentCell() {

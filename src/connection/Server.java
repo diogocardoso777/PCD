@@ -23,6 +23,7 @@ public class Server {
     }
     public void StartServing() throws IOException{
         gameGuiMain = GameGuiMain.getGameGuiInstance();
+
         ServerSocket ss = new ServerSocket(PORTO);
         try{
             while(true){
