@@ -32,9 +32,13 @@ public class GameGuiMain implements Observer {
 	public static GameGuiMain getGameGuiInstance(){
 		if(GAMEGUI_INSTANCE == null){
 			GAMEGUI_INSTANCE = new GameGuiMain();
+			GAMEGUI_INSTANCE.init();
 			//GAMEGUI_INSTANCE.init();
 		}
 		return GAMEGUI_INSTANCE;
+	}
+	public Game getGame(){
+		return this.game;
 	}
 
 
@@ -59,7 +63,6 @@ public class GameGuiMain implements Observer {
 			e.printStackTrace();
 		}
 
-		game.runThreads();
 	}
 
 	@Override
@@ -69,7 +72,6 @@ public class GameGuiMain implements Observer {
 
 	public static void main(String[] args) {
 		GameGuiMain game = getGameGuiInstance();
-		game.init();
 
 	}
 
