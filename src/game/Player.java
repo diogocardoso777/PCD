@@ -22,6 +22,7 @@ public abstract class Player {
 	protected  Game game;
 
 	private int id;
+	private boolean winner = false;
 
 	private byte currentStrength;
 	protected byte originalStrength;

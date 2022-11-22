@@ -17,7 +17,7 @@ public class Client {
     private Socket socket = new Socket((InetAddress.getByName(null)), PORTO);
     public static final int PORTO = 8080;
 
-    private GameGuiMain gameGuiMain;
+    //private GameGuiMain gameGuiMain;
 
     public Client() throws IOException {
     }
@@ -32,6 +32,11 @@ public class Client {
                 new OutputStreamWriter(socket.getOutputStream())),
                 true);
     }
+
+    private void receiveGameState(){
+
+    }
+
     public void runClient(){
         try{
             connectToServer();

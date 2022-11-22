@@ -36,6 +36,5 @@ public class BotPlayer extends Player implements Runnable{
             System.out.println("Thread nr. " + getIdentification() + " has won");
             game.playerWin();
         }
-        //game.countDownLatch.countDown();
     }
 }
