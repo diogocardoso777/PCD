@@ -14,7 +14,7 @@ import static java.lang.Thread.sleep;
 public class Client {
     private ObjectInputStream in;
     private PrintWriter out;
-    private Socket socket = new Socket((InetAddress.getByName(null)), PORTO);
+    private Socket socket;
     public static final int PORTO = 8080;
 
     //private GameGuiMain gameGuiMain;
@@ -25,7 +25,8 @@ public class Client {
     public void connectToServer() throws IOException {
         InetAddress address = InetAddress.getByName(null);
         System.out.println("Endereço: " + address);
-        //this.socket = new Socket(address, PORTO);
+
+        this.socket = new Socket(address, PORTO);
         System.out.println("Socket:" + socket);
         in = new ObjectInputStream(socket.getInputStream());
         out = new PrintWriter(new BufferedWriter(
@@ -33,19 +34,24 @@ public class Client {
                 true);
     }
 
-    private void receiveGameState(){
-
+    private void waitingMessage() throws IOException, ClassNotFoundException {
+        while (true){
+            byte[][] infoReceived = (byte[][]) in.readObject();
+            System.out.println(infoReceived);
+        }
     }
 
     public void runClient(){
         try{
             connectToServer();
-            sleep(1000);
+            waitingMessage();
         }catch (IOException e) {// ERRO...
-        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } finally {
             try{
+                if(socket!= null)
                 this.socket.close();
             }catch (IOException e) {//...
                 throw new RuntimeException(e);

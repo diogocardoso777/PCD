@@ -44,6 +44,7 @@ public class DealWithClient extends Thread{
             }
         }
 
+
         return coords;
     }
 
