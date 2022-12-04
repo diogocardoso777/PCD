@@ -4,6 +4,8 @@ import environment.Coordinate;
 import environment.Direction;
 import game.Game;
 import game.Player;
+import utils.GameStateInfo;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -126,4 +128,5 @@ public class BoardJComponent extends JComponent implements KeyListener {
 	public void clearLastPressedDirection() {
 		lastPressedDirection=null;
 	}
+
 }

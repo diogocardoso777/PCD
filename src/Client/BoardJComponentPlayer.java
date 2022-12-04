@@ -125,4 +125,9 @@ public class BoardJComponentPlayer extends JComponent implements KeyListener {
 	public void clearLastPressedDirection() {
 		lastPressedDirection=null;
 	}
+
+
+	public void setGameState(GameStateInfo gameState){
+		this.state = gameState;
+	}
 }

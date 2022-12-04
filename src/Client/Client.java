@@ -36,12 +36,12 @@ public class Client extends Observable {
     private void waitingMessage() throws IOException, ClassNotFoundException {
 
         stateInfo = (GameStateInfo) in.readObject();
-        ClientGui clientGui = new ClientGui(stateInfo.getCells().length, stateInfo.getCells()[0].length, stateInfo, this);
+        ClientGui clientGui = new ClientGui(stateInfo.getCells().length, stateInfo.getCells()[0].length,this);
         clientGui.init();
         while (true){
             stateInfo = (GameStateInfo) in.readObject();
-            clientGui.updateGui();
-           // System.out.println(stateInfo);
+            //clientGui.updateGui();
+            //System.out.println(stateInfo);
             notifyChange();
         }
     }
@@ -75,11 +75,11 @@ public class Client extends Observable {
 
     }
 
+
     public static void main(String[] args) throws IOException {
         new Client().runClient();
 
     }
-
 
 }
 //criar um package para o client e meter la o client

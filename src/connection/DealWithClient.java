@@ -4,6 +4,8 @@ import environment.Cell;
 import game.Game;
 import game.Player;
 import gui.GameGuiMain;
+import utils.CellInfo;
+import utils.GameStateInfo;
 
 import java.io.*;
 import java.net.Socket;
@@ -35,7 +37,7 @@ public class DealWithClient extends Thread{
         //Serializable é necessário para fazer o canal de objetos
     }
 
-    private byte [][] sendBoardState(){
+    private GameStateInfo sendBoardState(){
         Cell cells [][] = game.getBoard();
 
         CellInfo cellInfos [][] = new CellInfo[cells.length][cells[0].length];
@@ -50,8 +52,8 @@ public class DealWithClient extends Thread{
             }
         }
 
-
-        return coords;
+        gameState = new GameStateInfo(cellInfos);
+        return gameState;
     }
 
     @Override
