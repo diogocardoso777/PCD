@@ -4,11 +4,14 @@ import com.sun.source.tree.ConditionalExpressionTree;
 import game.BotPlayer;
 import game.Game;
 import game.Player;
+import utils.TimerThread;
 
 import java.io.Serializable;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import static java.lang.Thread.currentThread;
 
 public class Cell {
 	private Coordinate position;
@@ -48,6 +51,7 @@ public class Cell {
 		}
 		this.player = player;
 		lock.unlock();
+
 		//cellOcupied.signalAll();
 	}
 
@@ -77,8 +81,16 @@ public class Cell {
 			}
 		}else{
 			Player p = to.getPlayer();
-			if(p.getCurrentStrength() != 0)
+			if(p.getCurrentStrength() != 0){
 				fight(this.player, p);
+			}else{
+				TimerThread tt = new TimerThread(2000, currentThread());
+				tt.start();
+				waitPlayer(player);
+
+
+			}
+
 				//cellOcupied.signalAll();
 		}
 
@@ -87,6 +99,13 @@ public class Cell {
 
 		game.notifyChange();
 
+	}
+	public synchronized void waitPlayer(Player playerToWait){
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			return;
+		}
 	}
 	public void fight(Player player1, Player player2){
 		int comparison = Byte.compare(player1.getCurrentStrength(), player2.getCurrentStrength());

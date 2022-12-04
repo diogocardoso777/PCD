@@ -1,6 +1,8 @@
 package connection;
 
+import game.PhoneyHumanPlayer;
 import gui.GameGuiMain;
+import utils.TimerThread;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,45 +15,64 @@ import static java.lang.Thread.sleep;
 public class Server {
     public static final int PORTO = 8080;
     private GameGuiMain gameGuiMain;
-    private static int TIME_TO_CONNECT = 5000;
-
+    private ServerSocket ss;
+    private Boolean waitingForClients;
 
     public static void main(String[] args) {
 
         //Game game = new Game();
         try {
             new Server().startServing();
+
+
         }catch (IOException e){
 
         }
     }
     public void startServing() throws IOException{
+        waitingForClients = true;
         gameGuiMain = GameGuiMain.getGameGuiInstance();
         gameGuiMain.getGame().createBotThreads();
         System.out.println("Threads Created");
-        long t= System.currentTimeMillis();
-        long end = t+TIME_TO_CONNECT;
-        ServerSocket ss = new ServerSocket(PORTO);
+        ss = new ServerSocket(PORTO);
+        TimerThread tt = new TimerThread(gameGuiMain.getGame().INITIAL_WAITING_TIME, this);
+        tt.start();
         try{
-            while(System.currentTimeMillis() < end){
+            while(waitingForClients){
                 System.out.println("Sleeping");
                 Socket socket = ss.accept();
-                DealWithClient dealWithClient = new DealWithClient(socket, gameGuiMain.getGame());
-                dealWithClient.start();
+                System.out.println("Got an client");
+                int id = gameGuiMain.getGame().numPlayers();
+                gameGuiMain.getGame().addPlayerToGame(new PhoneyHumanPlayer(id, gameGuiMain.getGame()));
+                DealWithClient dealWithClient = new DealWithClient(socket, gameGuiMain.getGame(), id);
+                gameGuiMain.getGame().addPlayerThread(dealWithClient);
                 sleep(100);
 
             }
-            System.out.println("Done Waiting for Player to Connect");
-            gameGuiMain.getGame().runThreads();
-            System.out.println("Threads Running");
-            System.out.println("MainWaiting");
-            gameGuiMain.getGame().waitingToFinish();
+
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        } finally {
+        } catch (IOException e) {
+            threadHandler();
+        }
+    }
+    public void threadHandler(){
+        System.out.println("Done Waiting for Player to Connect");
+        gameGuiMain.getGame().runThreads();
+        System.out.println("Threads Running");
+        System.out.println("MainWaiting");
+        gameGuiMain.getGame().waitingToFinish();
+    }
 
-
+    public void close(){
+        try {
+            System.out.println("Closing");
+            waitingForClients = false;
             ss.close();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

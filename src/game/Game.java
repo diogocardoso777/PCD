@@ -22,10 +22,10 @@ public class Game extends Observable {
 	public static final long REFRESH_INTERVAL = 400;
 	public static final double MAX_INITIAL_STRENGTH = 3;
 	public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
-	public static final long INITIAL_WAITING_TIME = 6000;
+	public static final int INITIAL_WAITING_TIME = 6000;
 	private CountDownLatch countDownLatch = new CountDownLatch(NUM_FINISHED_PLAYERS_TO_END_GAME);
 	private ArrayList<Integer> winners= new ArrayList<Integer>();
-	private Thread[] players;
+	private ArrayList<Thread> players = new ArrayList<>();
 
 	protected Cell[][] board;
 
@@ -79,16 +79,22 @@ public class Game extends Observable {
 	}
 
 	public void createBotThreads (){
-		players = new Thread[NUM_PLAYERS];
 		for (int i = 0; i < NUM_PLAYERS; i++) {
-			players[i] = new Thread(new BotPlayer(i, this));
+			players.add(new Thread(new BotPlayer(i, this)));
 		}
 
+
+	}
+	public int numPlayers(){
+		return players.size();
 	}
 	public void runThreads(){
 		for(Thread t : players){
 			t.start();
 		}
+	}
+	public void addPlayerThread(Thread player){
+		players.add(player);
 	}
 	public void waitingToFinish(){
 		try {

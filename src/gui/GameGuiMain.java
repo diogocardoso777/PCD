@@ -45,8 +45,6 @@ public class GameGuiMain implements Observer {
 	private void buildGui() {
 		boardGui = new BoardJComponent(game);
 		frame.add(boardGui);
-
-
 		frame.setSize(800,800);
 		frame.setLocation(0, 150);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,14 +52,6 @@ public class GameGuiMain implements Observer {
 
 	public void init()  {
 		frame.setVisible(true);
-
-		// Demo players, should be deleted
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 

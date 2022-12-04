@@ -13,12 +13,14 @@ public class DealWithClient extends Thread{
     private Socket socket;
     private BufferedReader in;
     private ObjectOutputStream out;
-
+    private GameStateInfo gameState;
+    private int playerId;
     private Game game;
 
-    public DealWithClient(Socket socket, Game game){
+    public DealWithClient(Socket socket, Game game, int id){
         this.socket = socket;
         this.game = game;
+        this.playerId = id;
     }
     private void doConnections(Socket socket) throws IOException {
         in = new BufferedReader(new InputStreamReader(
@@ -36,11 +38,15 @@ public class DealWithClient extends Thread{
     private byte [][] sendBoardState(){
         Cell cells [][] = game.getBoard();
 
-        byte coords [][] = new byte[cells.length][cells[0].length];
+        CellInfo cellInfos [][] = new CellInfo[cells.length][cells[0].length];
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[i].length ; j++) {
-                if(cells[i][j].getPlayer() != null) coords[i][j] = cells[i][j].getPlayer().getCurrentStrength();
-                else coords[i][j] = -1;
+                if(cells[i][j].getPlayer()!=null){
+                    if(cells[i][j].getPlayer().getIdentification() == playerId)
+                        cellInfos[i][j] = new CellInfo(cells[i][j].getPlayer().getCurrentStrength(), true);
+                    else cellInfos[i][j] = new CellInfo(cells[i][j].getPlayer().getCurrentStrength(), false);
+                }
+
             }
         }
 

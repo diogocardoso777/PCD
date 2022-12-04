@@ -1,6 +1,7 @@
 package Client;
 
 import gui.GameGuiMain;
+import utils.GameStateInfo;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -8,19 +9,17 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Observable;
 
 import static java.lang.Thread.sleep;
 
-public class Client {
+public class Client extends Observable {
     private ObjectInputStream in;
     private PrintWriter out;
     private Socket socket;
     public static final int PORTO = 8080;
-
+    private GameStateInfo stateInfo;
     //private GameGuiMain gameGuiMain;
-
-    public Client() throws IOException {
-    }
 
     public void connectToServer() throws IOException {
         InetAddress address = InetAddress.getByName(null);
@@ -35,12 +34,26 @@ public class Client {
     }
 
     private void waitingMessage() throws IOException, ClassNotFoundException {
+
+        stateInfo = (GameStateInfo) in.readObject();
+        ClientGui clientGui = new ClientGui(stateInfo.getCells().length, stateInfo.getCells()[0].length, stateInfo, this);
+        clientGui.init();
         while (true){
-            byte[][] infoReceived = (byte[][]) in.readObject();
-            System.out.println(infoReceived);
+            stateInfo = (GameStateInfo) in.readObject();
+            clientGui.updateGui();
+           // System.out.println(stateInfo);
+            notifyChange();
         }
     }
 
+    public GameStateInfo getStateInfo() {
+        return stateInfo;
+    }
+
+    public void notifyChange() {
+        setChanged();
+        notifyObservers();
+    }
     public void runClient(){
         try{
             connectToServer();
