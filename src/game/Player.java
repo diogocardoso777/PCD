@@ -52,17 +52,12 @@ public abstract class Player {
 
 	//direction random
 	public void move(Direction dir){
+		if(dir == null) return;
 		Cell from = getCurrentCell();
 		Coordinate coordTo = new Coordinate(from.getPosition().x + dir.getVector().x, from.getPosition().y + dir.getVector().y);
 		if(!coordTo.isValidPosition()) return;
 		Cell to = game.getCell(coordTo);
 		from.movePlayer(this, to);
-	/*	from.takePlayer(p);
-		try {
-			to.setPlayer(p);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}*/
 	}
 	
 	@Override
@@ -95,7 +90,6 @@ public abstract class Player {
 	public byte getCurrentStrength() {
 		return currentStrength;
 	}
-
 
 	public int getIdentification() {
 		return id;

@@ -4,9 +4,7 @@ import game.PhoneyHumanPlayer;
 import gui.GameGuiMain;
 import utils.TimerThread;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -41,10 +39,15 @@ public class Server {
             while(waitingForClients){
                 System.out.println("Sleeping");
                 Socket socket = ss.accept();
-                System.out.println("Got an client");
+                System.out.println("Got a client");
                 int id = gameGuiMain.getGame().numPlayers();
+                //System.out.println("SERVER ID "+ id);
                 gameGuiMain.getGame().addPlayerToGame(new PhoneyHumanPlayer(id, gameGuiMain.getGame()));
                 DealWithClient dealWithClient = new DealWithClient(socket, gameGuiMain.getGame(), id);
+                DealWithClientIN dealWithClientIN = new DealWithClientIN(socket,gameGuiMain.getGame(), id);
+                dealWithClientIN.start();
+                //System.out.println(gameGuiMain.getGame().getPlayerFromId(id));
+                //System.out.println("thread is alive = " + dealWithClientIN.isAlive());
                 gameGuiMain.getGame().addPlayerThread(dealWithClient);
                 sleep(100);
 
@@ -69,7 +72,6 @@ public class Server {
             System.out.println("Closing");
             waitingForClients = false;
             ss.close();
-
 
         } catch (IOException e) {
             throw new RuntimeException(e);

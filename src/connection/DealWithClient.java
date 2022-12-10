@@ -11,9 +11,7 @@ import java.io.*;
 import java.net.Socket;
 
 public class DealWithClient extends Thread{
-    private Player player;
     private Socket socket;
-    private BufferedReader in;
     private ObjectOutputStream out;
     private GameStateInfo gameState;
     private int playerId;
@@ -25,16 +23,7 @@ public class DealWithClient extends Thread{
         this.playerId = id;
     }
     private void doConnections(Socket socket) throws IOException {
-        in = new BufferedReader(new InputStreamReader(
-                socket.getInputStream()));
         out = new ObjectOutputStream(socket.getOutputStream());
-    }
-    public void serve(){
-
-       // out.println(gameGuiMain);
-        //devemos mandar o board ou o game
-        //sendo assim n sei se a cell tem de ser Serializable ou o game
-        //Serializable é necessário para fazer o canal de objetos
     }
 
     private GameStateInfo sendBoardState(){
@@ -51,22 +40,26 @@ public class DealWithClient extends Thread{
 
             }
         }
-
         gameState = new GameStateInfo(cellInfos);
         return gameState;
     }
 
     @Override
-    public void run(){
+    public void run() {
         try {
             doConnections(socket);
-            while(!isInterrupted()) {
+            while (!isInterrupted()) {
                 sleep(Game.REFRESH_INTERVAL);
                 out.writeObject(sendBoardState());
             }
-        }
-        catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                out.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

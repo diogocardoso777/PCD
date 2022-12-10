@@ -1,7 +1,10 @@
 package game;
 
+import connection.DealWithClient;
 import environment.Cell;
 import environment.Direction;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Class to demonstrate a player being added to the game.
@@ -9,21 +12,17 @@ import environment.Direction;
  *
  */
 public class PhoneyHumanPlayer extends Player{
+	//private String moveDir=null;
+
 	public PhoneyHumanPlayer(int id, Game game) {
 		super(id, game);
+		this.originalStrength = 5;
 	}
 
 	public boolean isHumanPlayer() {
 		return true;
 	}
 
-	//TODO thread method  implementation
 
-	/*
-	@Override
-	public void run() {
-		game.addPlayerToGame(this);
-		
-		//System.out.println("id : " + this.getId() + "strength : " + this.getCurrentStrength());
-	}*/
+
 }

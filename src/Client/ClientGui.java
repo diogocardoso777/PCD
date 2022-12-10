@@ -36,6 +36,10 @@ public class ClientGui implements Observer {
         frame.setVisible(true);
     }
 
+    public BoardJComponentPlayer getBoard(){
+        return board;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         board.setGameState(client.getStateInfo());

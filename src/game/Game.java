@@ -79,26 +79,27 @@ public class Game extends Observable {
 	}
 
 	public void createBotThreads (){
-		for (int i = 0; i < NUM_PLAYERS; i++) {
+		for (int i = 0; i < NUM_PLAYERS; i++)
 			players.add(new Thread(new BotPlayer(i, this)));
-		}
-
-
 	}
+
 	public int numPlayers(){
 		return players.size();
 	}
+
 	public void runThreads(){
-		for(Thread t : players){
+		for(Thread t : players)
 			t.start();
-		}
 	}
+
 	public void addPlayerThread(Thread player){
 		players.add(player);
 	}
+
 	public void waitingToFinish(){
 		try {
 			countDownLatch.await();
+			notifyChange();
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
@@ -108,4 +109,15 @@ public class Game extends Observable {
 				b.interrupt();
 		WinDialog dialog = new WinDialog(winners);
 	}
+
+	public Player getPlayerFromId(int id){
+		for (int x = 0; x < Game.DIMX; x++)
+			for (int y = 0; y < Game.DIMY; y++) {
+				Player p = board[x][y].getPlayer();
+				if (p != null && p.getIdentification() == id && p.isHumanPlayer())
+					return p;
+			}
+		return null;
+	}
+
 }

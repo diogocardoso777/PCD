@@ -19,7 +19,6 @@ public class Cell {
 	private Player player=null;
 
 	private Lock lock = new ReentrantLock();
-	private Condition cellOcupied = lock.newCondition();
 	private Condition cellFree = lock.newCondition();
 	
 	public Cell(Coordinate position,Game g) {
@@ -51,8 +50,6 @@ public class Cell {
 		}
 		this.player = player;
 		lock.unlock();
-
-		//cellOcupied.signalAll();
 	}
 
 	public void setPlayer(Player player) throws InterruptedException {
@@ -61,7 +58,6 @@ public class Cell {
 			cellFree.await();
 		}
 		this.player = player;
-		//cellOcupied.signalAll();
 	}
 
 
@@ -77,21 +73,18 @@ public class Cell {
 				cellFree.signalAll();				//notificar as threads à espera que a CELL fique livre
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-
 			}
 		}else{
 			Player p = to.getPlayer();
 			if(p.getCurrentStrength() != 0){
 				fight(this.player, p);
 			}else{
-				TimerThread tt = new TimerThread(2000, currentThread());
-				tt.start();
-				waitPlayer(player);
-
-
+				if (!p.isHumanPlayer()) {			// se for humano não fica em espera
+					TimerThread tt = new TimerThread(2000, currentThread());
+					tt.start();
+					waitPlayer(player);            //O Q É ISTO?
+				}
 			}
-
-				//cellOcupied.signalAll();
 		}
 
 		to.lock.unlock();

@@ -1,5 +1,6 @@
 package Client;
 
+import game.Player;
 import gui.GameGuiMain;
 import utils.GameStateInfo;
 
@@ -19,12 +20,11 @@ public class Client extends Observable {
     private Socket socket;
     public static final int PORTO = 8080;
     private GameStateInfo stateInfo;
-    //private GameGuiMain gameGuiMain;
+    private ClientGui clientGui;
 
     public void connectToServer() throws IOException {
         InetAddress address = InetAddress.getByName(null);
         System.out.println("Endereço: " + address);
-
         this.socket = new Socket(address, PORTO);
         System.out.println("Socket:" + socket);
         in = new ObjectInputStream(socket.getInputStream());
@@ -33,15 +33,13 @@ public class Client extends Observable {
                 true);
     }
 
-    private void waitingMessage() throws IOException, ClassNotFoundException {
-
+    private void waitAndSendMessage() throws IOException, ClassNotFoundException{
         stateInfo = (GameStateInfo) in.readObject();
-        ClientGui clientGui = new ClientGui(stateInfo.getCells().length, stateInfo.getCells()[0].length,this);
+        clientGui = new ClientGui(stateInfo.getCells().length, stateInfo.getCells()[0].length,this);
         clientGui.init();
         while (true){
             stateInfo = (GameStateInfo) in.readObject();
-            //clientGui.updateGui();
-            //System.out.println(stateInfo);
+            sendKey();
             notifyChange();
         }
     }
@@ -57,29 +55,32 @@ public class Client extends Observable {
     public void runClient(){
         try{
             connectToServer();
-            waitingMessage();
-        }catch (IOException e) {// ERRO...
+            waitAndSendMessage();
+
+        }catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            //System.out.println("Jogo terminou");
         } finally {
             try{
                 if(socket!= null)
-                this.socket.close();
+                    this.socket.close();
             }catch (IOException e) {//...
                 throw new RuntimeException(e);
             }
         }
     }
-    void sendKey(){
 
+    private void sendKey(){
+        if (clientGui.getBoard().getLastPressedDirection() != null) {
+            //System.out.println(clientGui.getBoard().getLastPressedDirection().toString());
+            out.println(clientGui.getBoard().getLastPressedDirection().toString());
+            clientGui.getBoard().clearLastPressedDirection();
+        }
     }
 
 
     public static void main(String[] args) throws IOException {
         new Client().runClient();
-
     }
 
 }
-//criar um package para o client e meter la o client

@@ -76,7 +76,7 @@ public class BoardJComponentPlayer extends JComponent implements KeyListener {
 						g.drawImage(humanPlayerImage, (int) (p.x * cellWidth), (int) (p.y * cellHeight),
 								(int) (cellWidth), (int) (cellHeight), null);
 					}
-					//g.setColor(new Color(player.getIdentification() * 1000));
+					g.setColor(Color.BLACK);		//alterei para se ver melhor
 					((Graphics2D) g).setStroke(new BasicStroke(5));
 					Font font = g.getFont().deriveFont((float) cellHeight);
 					g.setFont(font);

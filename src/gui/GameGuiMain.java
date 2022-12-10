@@ -16,16 +16,12 @@ public class GameGuiMain implements Observer {
 
 	public static GameGuiMain GAMEGUI_INSTANCE;
 
-
-
 	public GameGuiMain() {
 		super();
 		game = new Game();
 		game.addObserver(this);
 
 		buildGui();
-
-
 	}
 
 
@@ -33,7 +29,6 @@ public class GameGuiMain implements Observer {
 		if(GAMEGUI_INSTANCE == null){
 			GAMEGUI_INSTANCE = new GameGuiMain();
 			GAMEGUI_INSTANCE.init();
-			//GAMEGUI_INSTANCE.init();
 		}
 		return GAMEGUI_INSTANCE;
 	}
@@ -62,7 +57,6 @@ public class GameGuiMain implements Observer {
 
 	public static void main(String[] args) {
 		GameGuiMain game = getGameGuiInstance();
-
 	}
 
 }

@@ -17,18 +17,17 @@ public enum Direction {
 		return values()[generator.nextInt(values().length)];
 	}
 
-	public static Direction directionFor(int keyCode) {
-		switch(keyCode){
-			case KeyEvent.VK_DOWN:
-				return DOWN;
-			case KeyEvent.VK_UP:
-				return UP;
-			case KeyEvent.VK_LEFT:
-				return LEFT;
-			case KeyEvent.VK_RIGHT:
-				return RIGHT;
-		}
+	public static Direction directionFor(String name){
+		if(name == null) return null;
+		for(Direction d : values() )
+			if(d.name().equals(name))
+				return d;
+		return null;
+	}
 
-		throw new IllegalArgumentException();
+	@Override
+	public String toString() {
+		if(this == null) return "null";
+		return name();
 	}
 }
