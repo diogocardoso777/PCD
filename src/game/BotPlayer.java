@@ -29,7 +29,7 @@ public class BotPlayer extends Player implements Runnable{
 
         if(super.getCurrentStrength() >= 10) {
             System.out.println("Thread nr. " + getIdentification() + " has won");
-            game.playerWin(getIdentification());
+            game.playerWin();
         }
     }
 }

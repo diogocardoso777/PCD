@@ -14,17 +14,21 @@ public class ClientGui implements Observer {
     private int DIMY;
     private Client client;
     private JFrame frame = new JFrame("pcd.io client");
-    public ClientGui(int DIMX, int DIMY, Client client){
+    private final boolean alternativeKeys;
+
+
+    public ClientGui(int DIMX, int DIMY, Client client, boolean alternativeKeys){
         this.DIMX = DIMX;
         this.DIMY = DIMY;
         this.client = client;
+        this.alternativeKeys = alternativeKeys;
         client.addObserver(this);
         buildGui();
 
     }
 
     public void buildGui(){
-        board = new BoardJComponentPlayer(DIMX, DIMY, client.getStateInfo());
+        board = new BoardJComponentPlayer(DIMX, DIMY, client.getStateInfo(), alternativeKeys);
         frame.add(board);
 
         frame.setSize(800,800);

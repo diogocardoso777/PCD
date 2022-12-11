@@ -17,6 +17,7 @@ public class PhoneyHumanPlayer extends Player{
 	public PhoneyHumanPlayer(int id, Game game) {
 		super(id, game);
 		this.originalStrength = 5;
+		this.currentStrength = originalStrength;
 	}
 
 	public boolean isHumanPlayer() {

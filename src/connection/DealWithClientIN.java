@@ -25,27 +25,37 @@ public class DealWithClientIN extends Thread{
                 socket.getInputStream()));
     }
 
+    private boolean isFinished(Player p){
+        if(game.isAlive(playerId))
+            return false;
+        else if(game.isWinner(playerId))
+            game.playerWin();
+
+        return true;
+    }
+
+    @Override
     public void run() {
         try {
             doConnections(socket);
             Player p = game.getPlayerFromId(playerId);
-            while (!isFinished(p)){
+            while (!isFinished(p) || !isInterrupted()){
+                p = game.getPlayerFromId(playerId);
                 sleep(Game.REFRESH_INTERVAL);
                 String keyPressed = in.readLine();
-                game.getPlayerFromId(playerId).move(Direction.directionFor(keyPressed));
+                p.move(Direction.directionFor(keyPressed));
             }
+
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            try {
+                System.out.println("dealwithclientIN socket close");
+                socket.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
-    private boolean isFinished(Player p){
-        if(p.getCurrentStrength()!= 0 && p.getCurrentStrength() < 10)
-            return false;
-        else if(p.getCurrentStrength() >= 10)
-            game.playerWin(playerId);
 
-        return true;
-    }
 
 }

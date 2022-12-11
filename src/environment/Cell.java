@@ -35,20 +35,22 @@ public class Cell {
 		return player!=null;
 	}
 
-
 	public Player getPlayer() {
 		return player;
 	}
-
-	// Should not be used like this in the initial state: cell might be occupied, must coordinate this operation
 
 	public void setPlayerInitially(Player player) throws InterruptedException {
 		lock.lock();
 		while(isOcupied()) {
 			System.out.println("Célula de " + position.toString() + " está ocupada pelo jogador " + this.player.toString() + " O Jogador "+ player.toString() + " terá de esperar que a posição fique livre.");
+			if(!game.isAlive(this.player.getIdentification())) {
+				lock.unlock();
+				return;
+			}
 			cellFree.await();
 		}
 		this.player = player;
+		player.setIsSet(true);
 		lock.unlock();
 	}
 
@@ -82,7 +84,7 @@ public class Cell {
 				if (!p.isHumanPlayer()) {			// se for humano não fica em espera
 					TimerThread tt = new TimerThread(2000, currentThread());
 					tt.start();
-					waitPlayer(player);            //O Q É ISTO?
+					waitPlayer();            //O Q É ISTO?
 				}
 			}
 		}
@@ -93,7 +95,7 @@ public class Cell {
 		game.notifyChange();
 
 	}
-	public synchronized void waitPlayer(Player playerToWait){
+	public synchronized void waitPlayer(){
 		try {
 			wait();
 		} catch (InterruptedException e) {

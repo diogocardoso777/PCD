@@ -2,6 +2,7 @@ package Client;
 
 import game.Player;
 import gui.GameGuiMain;
+import jdk.swing.interop.SwingInterOpUtils;
 import utils.GameStateInfo;
 
 import java.awt.event.KeyEvent;
@@ -18,7 +19,6 @@ public class Client extends Observable {
     private ObjectInputStream in;
     private PrintWriter out;
     private Socket socket;
-    public static final int PORTO = 8080;
     private GameStateInfo stateInfo;
     private ClientGui clientGui;
 
@@ -33,14 +33,26 @@ public class Client extends Observable {
                 true);
     }
 
-    private void waitAndSendMessage() throws IOException, ClassNotFoundException{
-        stateInfo = (GameStateInfo) in.readObject();
-        clientGui = new ClientGui(stateInfo.getCells().length, stateInfo.getCells()[0].length,this);
-        clientGui.init();
-        while (true){
+    private void receiveAndSendMessage() throws IOException, ClassNotFoundException{
+        while (!stateInfo.gameIsFinished()){
             stateInfo = (GameStateInfo) in.readObject();
             sendKey();
             notifyChange();
+        }
+        System.out.println(stateInfo.gameIsFinished());
+    }
+
+    private void sendKey(){
+        if (clientGui.getBoard().getLastPressedDirection() != null) {
+            out.println(clientGui.getBoard().getLastPressedDirection().toString());
+            clientGui.getBoard().clearLastPressedDirection();
+        }
+    }
+    public void printResults(){
+        if(stateInfo.isWinner()){
+            System.out.println("Ganhaste");
+        }else{
+            System.out.println("Perdeste");
         }
     }
 
@@ -52,14 +64,17 @@ public class Client extends Observable {
         setChanged();
         notifyObservers();
     }
-    public void runClient(){
+    public void runClient(String address, int port, boolean alternativeKeys){
         try{
-            connectToServer();
-            waitAndSendMessage();
+            connectToServer(address, port);
+            stateInfo = (GameStateInfo) in.readObject();
+            clientGui = new ClientGui(stateInfo.getCells().length, stateInfo.getCells()[0].length,this, alternativeKeys);
+            clientGui.init();
+            receiveAndSendMessage();
+            printResults();
 
         }catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-            //System.out.println("Jogo terminou");
+            System.out.println("Perdeste");
         } finally {
             try{
                 if(socket!= null)
@@ -70,17 +85,17 @@ public class Client extends Observable {
         }
     }
 
-    private void sendKey(){
-        if (clientGui.getBoard().getLastPressedDirection() != null) {
-            //System.out.println(clientGui.getBoard().getLastPressedDirection().toString());
-            out.println(clientGui.getBoard().getLastPressedDirection().toString());
-            clientGui.getBoard().clearLastPressedDirection();
-        }
-    }
 
 
-    public static void main(String[] args) throws IOException {
-        new Client().runClient();
+
+    public static void main(String[] args) {
+
+        new Client().runClient(
+                args[0],
+                Integer.parseInt(args[1]),
+                Boolean.parseBoolean(args[2])
+        );
+        System.exit(0);
     }
 
 }

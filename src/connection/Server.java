@@ -7,6 +7,7 @@ import utils.TimerThread;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
 
@@ -15,13 +16,13 @@ public class Server {
     private GameGuiMain gameGuiMain;
     private ServerSocket ss;
     private Boolean waitingForClients;
+    ArrayList<DealWithClientIN> dealWithClientINArrayList = new ArrayList<>();
 
     public static void main(String[] args) {
 
         //Game game = new Game();
         try {
             new Server().startServing();
-
 
         }catch (IOException e){
 
@@ -45,8 +46,8 @@ public class Server {
                 gameGuiMain.getGame().addPlayerToGame(new PhoneyHumanPlayer(id, gameGuiMain.getGame()));
                 DealWithClient dealWithClient = new DealWithClient(socket, gameGuiMain.getGame(), id);
                 DealWithClientIN dealWithClientIN = new DealWithClientIN(socket,gameGuiMain.getGame(), id);
-                dealWithClientIN.start();
-                //System.out.println(gameGuiMain.getGame().getPlayerFromId(id));
+                dealWithClientINArrayList.add(dealWithClientIN);
+                System.out.println(gameGuiMain.getGame().getPlayerFromId(id));
                 //System.out.println("thread is alive = " + dealWithClientIN.isAlive());
                 gameGuiMain.getGame().addPlayerThread(dealWithClient);
                 sleep(100);
@@ -62,6 +63,7 @@ public class Server {
     public void threadHandler(){
         System.out.println("Done Waiting for Player to Connect");
         gameGuiMain.getGame().runThreads();
+        runInputThreads();
         System.out.println("Threads Running");
         System.out.println("MainWaiting");
         gameGuiMain.getGame().waitingToFinish();
@@ -76,5 +78,10 @@ public class Server {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void runInputThreads(){
+        for (DealWithClientIN d : dealWithClientINArrayList)
+            d.start();
     }
 }

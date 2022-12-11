@@ -1,6 +1,7 @@
 package game;
 
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.concurrent.locks.Condition;
@@ -22,12 +23,12 @@ public class Game extends Observable {
 	public static final long REFRESH_INTERVAL = 400;
 	public static final double MAX_INITIAL_STRENGTH = 3;
 	public static final long MAX_WAITING_TIME_FOR_MOVE = 2000;
-	public static final int INITIAL_WAITING_TIME = 6000;
+	public static final int INITIAL_WAITING_TIME = 10000;		//6000
 	private CountDownLatch countDownLatch = new CountDownLatch(NUM_FINISHED_PLAYERS_TO_END_GAME);
-	private ArrayList<Integer> winners= new ArrayList<Integer>();
 	private ArrayList<Thread> players = new ArrayList<>();
 
 	protected Cell[][] board;
+	private boolean gameOver = false;
 
 	public Game() {
 		board = new Cell[Game.DIMX][Game.DIMY];
@@ -41,9 +42,11 @@ public class Game extends Observable {
 	 * @param player 
 	 */
 	public void addPlayerToGame (Player player) {
-		Cell initialPos=getRandomCell();
 		try {
-			initialPos.setPlayerInitially(player);
+			while (!player.getIsSet()) {
+				Cell initialPos = getRandomCell();
+				initialPos.setPlayerInitially(player);
+			}
 		} catch (InterruptedException e) {
 			return;
 			//throw new RuntimeException(e);
@@ -73,8 +76,7 @@ public class Game extends Observable {
 		return newCell; 
 	}
 
-	public void playerWin(int id){
-		winners.add(id);
+	public void playerWin(){
 		countDownLatch.countDown();
 	}
 
@@ -99,6 +101,7 @@ public class Game extends Observable {
 	public void waitingToFinish(){
 		try {
 			countDownLatch.await();
+			gameOver = true;
 			notifyChange();
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
@@ -107,17 +110,27 @@ public class Game extends Observable {
 		for (Thread b : players)
 			if(b.isAlive())
 				b.interrupt();
-		WinDialog dialog = new WinDialog(winners);
 	}
 
 	public Player getPlayerFromId(int id){
 		for (int x = 0; x < Game.DIMX; x++)
 			for (int y = 0; y < Game.DIMY; y++) {
 				Player p = board[x][y].getPlayer();
-				if (p != null && p.getIdentification() == id && p.isHumanPlayer())
+				if (p != null && p.getIdentification() == id)
 					return p;
 			}
 		return null;
 	}
 
+	public boolean isGameOver() {
+		return gameOver;
+	}
+
+	public boolean isWinner(int playerId) {
+		return getPlayerFromId(playerId).getCurrentStrength() == 10;
+	}
+
+	public boolean isAlive(int playerId){
+		return getPlayerFromId(playerId).getCurrentStrength() > 0 && getPlayerFromId(playerId).getCurrentStrength() < 10;
+	}
 }

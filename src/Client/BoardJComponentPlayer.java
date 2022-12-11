@@ -29,12 +29,15 @@ public class BoardJComponentPlayer extends JComponent implements KeyListener {
 	private int DIMX;
 	private int DIMY;
 	private GameStateInfo state;
-	public BoardJComponentPlayer(int DIMX, int DIMY, GameStateInfo state) {
-		setFocusable(true);
-		addKeyListener(this);
+	private final boolean alternativeKeys;
+
+	public BoardJComponentPlayer(int DIMX, int DIMY, GameStateInfo state, boolean alternativeKeys) {
 		this.DIMX = DIMX;
 		this.DIMY = DIMY;
 		this.state = state;
+		this.alternativeKeys = alternativeKeys;
+		setFocusable(true);
+		addKeyListener(this);
 	}
 
 	@Override
@@ -91,19 +94,36 @@ public class BoardJComponentPlayer extends JComponent implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		switch(e.getKeyCode()){
-		case KeyEvent.VK_LEFT :
-			lastPressedDirection= Direction.LEFT;
-			break;
-		case KeyEvent.VK_RIGHT:
-			lastPressedDirection= Direction.RIGHT;
-			break;
-		case KeyEvent.VK_UP:
-			lastPressedDirection= Direction.UP;
-			break;
-		case KeyEvent.VK_DOWN:
-			lastPressedDirection= Direction.DOWN;
-			break;
+		if(alternativeKeys) {
+			switch(e.getKeyCode()){
+				case  KeyEvent.VK_A:
+					lastPressedDirection=environment.Direction.LEFT;
+					break;
+				case  KeyEvent.VK_D:
+					lastPressedDirection=environment.Direction.RIGHT;
+					break;
+				case KeyEvent.VK_W:
+					lastPressedDirection=environment.Direction.UP;
+					break;
+				case KeyEvent.VK_S:
+					lastPressedDirection=environment.Direction.DOWN;
+					break;
+			}
+		}else {
+			switch(e.getKeyCode()){
+				case  KeyEvent.VK_LEFT:
+					lastPressedDirection=environment.Direction.LEFT;
+					break;
+				case  KeyEvent.VK_RIGHT:
+					lastPressedDirection=environment.Direction.RIGHT;
+					break;
+				case KeyEvent.VK_UP:
+					lastPressedDirection=environment.Direction.UP;
+					break;
+				case KeyEvent.VK_DOWN:
+					lastPressedDirection=environment.Direction.DOWN;
+					break;
+			}
 		}
 	}
 

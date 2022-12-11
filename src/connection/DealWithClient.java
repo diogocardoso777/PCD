@@ -13,7 +13,6 @@ import java.net.Socket;
 public class DealWithClient extends Thread{
     private Socket socket;
     private ObjectOutputStream out;
-    private GameStateInfo gameState;
     private int playerId;
     private Game game;
 
@@ -25,8 +24,7 @@ public class DealWithClient extends Thread{
     private void doConnections(Socket socket) throws IOException {
         out = new ObjectOutputStream(socket.getOutputStream());
     }
-
-    private GameStateInfo sendBoardState(){
+    private CellInfo[][] generateCells(){
         Cell cells [][] = game.getBoard();
 
         CellInfo cellInfos [][] = new CellInfo[cells.length][cells[0].length];
@@ -37,11 +35,26 @@ public class DealWithClient extends Thread{
                         cellInfos[i][j] = new CellInfo(cells[i][j].getPlayer().getCurrentStrength(), true);
                     else cellInfos[i][j] = new CellInfo(cells[i][j].getPlayer().getCurrentStrength(), false);
                 }
-
             }
         }
-        gameState = new GameStateInfo(cellInfos);
-        return gameState;
+        return cellInfos;
+    }
+    private GameStateInfo clientBoardState(){
+        CellInfo[][] cells = generateCells();
+        /*
+        if(game.isGameOver() || game.isWinner(playerId))
+            return new GameStateInfo(cells, false);
+        else if(game.isAlive(playerId))
+            return new GameStateInfo(cells);
+        else
+            return new GameStateInfo(cells, true);*/
+        if(game.isWinner(playerId))
+            return new GameStateInfo(cells, true);
+        if(game.isGameOver() || !game.isAlive(playerId))
+            return new GameStateInfo(cells, false);
+
+        return new GameStateInfo(cells);
+
     }
 
     @Override
@@ -50,15 +63,15 @@ public class DealWithClient extends Thread{
             doConnections(socket);
             while (!isInterrupted()) {
                 sleep(Game.REFRESH_INTERVAL);
-                out.writeObject(sendBoardState());
+                out.writeObject(clientBoardState());
             }
+
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        } finally {
             try {
-                out.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                out.writeObject(clientBoardState());
+                System.out.println("socket closing by DealWithClient");
+                socket.close();
+            } catch (IOException ex) {
             }
         }
     }

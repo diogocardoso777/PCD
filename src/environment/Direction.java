@@ -18,7 +18,6 @@ public enum Direction {
 	}
 
 	public static Direction directionFor(String name){
-		if(name == null) return null;
 		for(Direction d : values() )
 			if(d.name().equals(name))
 				return d;

@@ -22,9 +22,9 @@ public abstract class Player {
 	protected  Game game;
 
 	private int id;
-	private boolean winner = false;
+	private boolean isSet = false;
 
-	private byte currentStrength;
+	protected byte currentStrength;
 	protected byte originalStrength;
 
 
@@ -43,7 +43,7 @@ public abstract class Player {
 		super();
 		this.id = id;
 		this.game=game;
-		originalStrength= (byte) (Math.floor(Math.random() * 3) + 1);
+		this.originalStrength= (byte) (Math.floor(Math.random() * 3) + 1);
 		currentStrength=originalStrength;
 	}
 
@@ -107,4 +107,11 @@ public abstract class Player {
 		this.currentStrength = 0;
 	}
 
+	public boolean getIsSet(){
+		return isSet;
+	}
+
+	public void setIsSet(boolean set) {
+		isSet = set;
+	}
 }
