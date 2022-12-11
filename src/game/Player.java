@@ -52,8 +52,8 @@ public abstract class Player {
 
 	//direction random
 	public void move(Direction dir){
-		if(dir == null) return;
 		Cell from = getCurrentCell();
+		if(dir == null || from == null) return;
 		Coordinate coordTo = new Coordinate(from.getPosition().x + dir.getVector().x, from.getPosition().y + dir.getVector().y);
 		if(!coordTo.isValidPosition()) return;
 		Cell to = game.getCell(coordTo);
