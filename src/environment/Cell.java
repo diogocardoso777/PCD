@@ -84,7 +84,7 @@ public class Cell {
 				if (!p.isHumanPlayer()) {			// se for humano não fica em espera
 					TimerThread tt = new TimerThread(2000, currentThread());
 					tt.start();
-					waitPlayer();            //O Q É ISTO?
+					waitPlayer();
 				}
 			}
 		}

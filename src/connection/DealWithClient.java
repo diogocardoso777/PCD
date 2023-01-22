@@ -41,13 +41,6 @@ public class DealWithClient extends Thread{
     }
     private GameStateInfo clientBoardState(){
         CellInfo[][] cells = generateCells();
-        /*
-        if(game.isGameOver() || game.isWinner(playerId))
-            return new GameStateInfo(cells, false);
-        else if(game.isAlive(playerId))
-            return new GameStateInfo(cells);
-        else
-            return new GameStateInfo(cells, true);*/
         if(game.isWinner(playerId))
             return new GameStateInfo(cells, true);
         if(game.isGameOver() || !game.isAlive(playerId))

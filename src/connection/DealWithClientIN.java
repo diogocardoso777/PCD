@@ -39,7 +39,7 @@ public class DealWithClientIN extends Thread{
         try {
             doConnections(socket);
             Player p = game.getPlayerFromId(playerId);
-            while (!isFinished(p) || !isInterrupted()){
+            while (!isFinished(p) && !isInterrupted()){
                 p = game.getPlayerFromId(playerId);
                 sleep(Game.REFRESH_INTERVAL);
                 String keyPressed = in.readLine();

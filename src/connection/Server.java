@@ -16,7 +16,7 @@ public class Server {
     private GameGuiMain gameGuiMain;
     private ServerSocket ss;
     private Boolean waitingForClients;
-    ArrayList<DealWithClientIN> dealWithClientINArrayList = new ArrayList<>();
+    private ArrayList<DealWithClientIN> dealWithClientINArrayList = new ArrayList<>();
 
     public static void main(String[] args) {
 
